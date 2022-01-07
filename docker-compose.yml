@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  miniconda3:
+    image: aaamlp_miniconda3
+    container_name: aaamlp_miniconda3
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - .:/opt/study/aaamlp_transcription
+    tty: true
