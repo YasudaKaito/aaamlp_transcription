@@ -11,4 +11,4 @@ services:
       - 8888:8888
     volumes:
       - .:/opt/study/aaamlp_transcription
-    tty: true
+#    tty: true
