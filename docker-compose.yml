@@ -7,8 +7,15 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    entrypoint: >
+      jupyter notebook
+      --notebook-dir=/opt/study/aaamlp_transcription
+      --ip='*'
+      --port=8888
+      --no-browser
+      --allow-root
     ports:
       - 8888:8888
     volumes:
       - .:/opt/study/aaamlp_transcription
-    tty: true
+#    tty: true
