@@ -29,10 +29,12 @@ def run(fold, model):
     # モデル保存
     joblib.dump(clf, os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin"))
 
+
 def _xy_from_df(df: pd.DataFrame):
     x = df.drop("label", axis=1).values
     y = df.label.values
     return x, y
+
 
 if __name__ == "__main__":
     psr = argparse.ArgumentParser()
