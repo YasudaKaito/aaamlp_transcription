@@ -130,3 +130,5 @@ dmypy.json
 
 # input data
 project/input/
+# model
+project/models/
