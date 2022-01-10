@@ -10,5 +10,5 @@ RUN conda create -n ml python==3.7.6
 SHELL ["conda", "run", "-n", "ml", "/bin/bash", "-c"]
 RUN pip install -r requirements.txt
 ENTRYPOINT jupyter notebook \
-    --notebook-dir=/opt/study/aaamlp_transcription/notebooks --ip='*' --port=8888 \
+    --notebook-dir=/opt/study/aaamlp_transcription/project --ip='*' --port=8888 \
     --no-browser --allow-root
