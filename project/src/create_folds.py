@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 import pandas as pd
 from sklearn import model_selection
 
+
 if __name__ == "__main__":
     psr = ArgumentParser()
     psr.add_argument("--input", type=str)

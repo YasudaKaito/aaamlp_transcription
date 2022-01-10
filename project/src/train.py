@@ -2,13 +2,14 @@ import os
 import argparse
 
 import config
+import model_dispatcher
 
 import joblib
 import pandas as pd
 from sklearn import metrics
-from sklearn import tree
 
-def run(fold):
+
+def run(fold, model):
     df = pd.read_csv(config.TRAINING_FILE)
     # 引数の fold と一致しないデータを学習に利用
     df_train = df[df.kfold != fold].reset_index(drop=True)
@@ -19,8 +20,7 @@ def run(fold):
     x_train, y_train = _xy_from_df(df_train)
     x_valid, y_valid = _xy_from_df(df_valid)
 
-    # 決定木
-    clf = tree.DecisionTreeClassifier()
+    clf = model_dispatcher.models[model]
     clf.fit(x_train, y_train)
     # 検証データを予測
     preds = clf.predict(x_valid)
@@ -37,5 +37,6 @@ def _xy_from_df(df: pd.DataFrame):
 if __name__ == "__main__":
     psr = argparse.ArgumentParser()
     psr.add_argument("--fold", type=int)
+    psr.add_argument("--model", type=str)
     args = psr.parse_args()
-    run(fold=args.fold)
+    run(fold=args.fold, model=args.model)
