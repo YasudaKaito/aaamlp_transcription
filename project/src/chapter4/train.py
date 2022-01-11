@@ -1,8 +1,8 @@
 import os
 import argparse
 
-import config
-import model_dispatcher
+from chapter4 import config
+from chapter4 import model_dispatcher
 
 import joblib
 import pandas as pd

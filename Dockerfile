@@ -9,6 +9,7 @@ COPY requirements.txt .
 RUN conda create -n ml python==3.7.6
 SHELL ["conda", "run", "-n", "ml", "/bin/bash", "-c"]
 RUN pip install -r requirements.txt
+ENV PYTHONPATH "${PYTHONPATH}:/opt/study/aaamlp_transcription/project/src"
 ENTRYPOINT jupyter notebook \
     --notebook-dir=/opt/study/aaamlp_transcription/project --ip='*' --port=8888 \
     --no-browser --allow-root
