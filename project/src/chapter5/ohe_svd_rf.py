@@ -1,5 +1,7 @@
 import pandas as pd
 
+from scipy import sparse
+from sklearn import decomposition
 from sklearn import metrics
 from sklearn import preprocessing
 
@@ -16,18 +18,24 @@ def run(fold):
     for col in ftrs:
         df.loc[:, col] = df[col].astype(str).fillna("NONE")
 
-    # ラベルエンコード
-    # one hot エンコードに対し決定木系は時間がかかるため
-    for col in ftrs:
-        lbl = preprocessing.LabelEncoder()
-        lbl.fit(df[col])
-        df.loc[:, col] = lbl.transform(df[col])
-
     # 引数と一致しない番号を学習に、さもなくば検証に利用
     df_train = df[df.kfold != fold].reset_index(drop=True)
     df_valid = df[df.kfold == fold].reset_index(drop=True)
-    x_train = df_train[ftrs].values
-    x_valid = df_valid[ftrs].values
+
+    ohe = preprocessing.OneHotEncoder()
+    # 学習・検証両データを結合して one hot エンコードを学習
+    full = pd.concat([df_train[ftrs], df_valid[ftrs]], axis=0)
+    ohe.fit(full[ftrs])
+    # one hot エンコード
+    x_train = ohe.transform(df_train[ftrs])
+    x_valid = ohe.transform(df_valid[ftrs])
+
+    # 特異値分解. 120次元に圧縮
+    svd = decomposition.TruncatedSVD(n_components=120)
+    full_sparse = sparse.vstack((x_train, x_valid))
+    svd.fit(full_sparse)
+    x_train = svd.transform(x_train)
+    x_valid = svd.transform(x_valid)
 
     # 学習
     mdl = model_dispatcher.models["rf"](n_jobs=-1)
