@@ -1,11 +1,9 @@
 import pandas as pd
 from nltk.tokenize import word_tokenize
-from sklearn import linear_model, metrics, model_selection
+from sklearn import metrics, model_selection, naive_bayes
 from sklearn.feature_extraction.text import CountVectorizer
 
-# IMDB を Bag of words で疎行列化
-# 肯定的なサンプルと否定的なサンプルの比率が1:1のため、正答率を指標として使用できる
-# 高次元の疎行列に適したモデルはロジスティック回帰
+# IMDB をナイーブベイズで分類
 if __name__ == "__main__":
     df = pd.read_csv("../../input/imdb.csv")
     # 肯定的、否定的を1、0に置換
@@ -31,7 +29,7 @@ if __name__ == "__main__":
         xtrain = count_vec.transform(train_df.review)
         xtest = count_vec.transform(test_df.review)
 
-        model = linear_model.LogisticRegression()
+        model = naive_bayes.MultinomialNB()
         model.fit(xtrain, train_df.sentiment)
 
         # 評価用データに対する予測
